@@ -1,0 +1,314 @@
+<w:p>
+  <w:pPr>
+    <w:pStyle w:val="ListParagraph"/>
+    <w:numPr>
+      <w:ilvl w:val="0"/>
+      <w:numId w:val="1"/>
+    </w:numPr>
+  </w:pPr>
+  <w:r>
+    <w:t xml:space="preserve">Some text </w:t>
+  </w:r>
+  <w:r>
+    <w:t xml:space="preserve"> in a span </w:t>
+  </w:r>
+  <w:r>
+    <w:t xml:space="preserve"> and some more text </w:t>
+  </w:r>
+</w:p>
+<w:p>
+  <w:pPr>
+    <w:pStyle w:val="ListParagraph"/>
+    <w:numPr>
+      <w:ilvl w:val="0"/>
+      <w:numId w:val="0"/>
+    </w:numPr>
+  </w:pPr>
+  <w:r/>
+</w:p>
+<w:p>
+  <w:pPr>
+    <w:pStyle w:val="ListParagraph"/>
+    <w:numPr>
+      <w:ilvl w:val="0"/>
+      <w:numId w:val="0"/>
+    </w:numPr>
+    <w:ind w:left="720"/>
+  </w:pPr>
+  <w:r>
+    <w:t xml:space="preserve">Text in a new line in div</w:t>
+  </w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="1"/>
+  </w:numPr>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">Some text (</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve"> link </w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve">) and some more text </w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="0"/>
+  </w:numPr>
+</w:pPr>
+<w:r/>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="0"/>
+  </w:numPr>
+  <w:ind w:left="720"/>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">Text in a new line in div</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="1"/>
+  </w:numPr>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve"> Some text in small and again normal</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="1"/>
+  </w:numPr>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve"> Some text </w:t>
+</w:r>
+<w:r>
+  <w:rPr>
+    <w:b/>
+  </w:rPr>
+  <w:t xml:space="preserve">in strong</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve"> and again normal </w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="0"/>
+  </w:numPr>
+</w:pPr>
+<w:r/>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="0"/>
+  </w:numPr>
+  <w:ind w:left="720"/>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">New paragraph</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="1"/>
+  </w:numPr>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">Some text </w:t>
+</w:r>
+<w:r>
+  <w:rPr>
+    <w:i/>
+  </w:rPr>
+  <w:t xml:space="preserve">in em</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve"> and normal text </w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="0"/>
+  </w:numPr>
+</w:pPr>
+<w:r/>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="0"/>
+  </w:numPr>
+  <w:ind w:left="720"/>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">New paragraph</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="1"/>
+  </w:numPr>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">Some text </w:t>
+</w:r>
+<w:r>
+  <w:rPr>
+    <w:i/>
+  </w:rPr>
+  <w:t xml:space="preserve">in italics</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve"> and normal text </w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="0"/>
+  </w:numPr>
+</w:pPr>
+<w:r/>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="0"/>
+  </w:numPr>
+  <w:ind w:left="720"/>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">New paragraph</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="1"/>
+  </w:numPr>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">Some text </w:t>
+</w:r>
+<w:r>
+  <w:rPr>
+    <w:b/>
+  </w:rPr>
+  <w:t xml:space="preserve">in bold</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve"> and normal text </w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="0"/>
+  </w:numPr>
+</w:pPr>
+<w:r/>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="0"/>
+  </w:numPr>
+  <w:ind w:left="720"/>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">New paragraph</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="1"/>
+  </w:numPr>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">Some text </w:t>
+</w:r>
+<w:r>
+  <w:rPr>
+    <w:u w:val="single"/>
+  </w:rPr>
+  <w:t xml:space="preserve">underlined</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve"> and normal text </w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="0"/>
+  </w:numPr>
+</w:pPr>
+<w:r/>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="0"/>
+  </w:numPr>
+  <w:ind w:left="720"/>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">New paragraph</w:t>
+</w:r>
+</w:p>

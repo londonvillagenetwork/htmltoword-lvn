@@ -1,0 +1,571 @@
+<w:p>
+  <w:pPr>
+    <w:pStyle w:val="Heading1"/>
+  </w:pPr>
+  <w:r>
+    <w:t xml:space="preserve">My document</w:t>
+  </w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">Fake TOC</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="1"/>
+  </w:numPr>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">Section 1</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve"> (Sec1) </w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="ListParagraph"/>
+  <w:numPr>
+    <w:ilvl w:val="0"/>
+    <w:numId w:val="1"/>
+  </w:numPr>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">Section 2</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve"> (Sec2) </w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:br w:type="page"/>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="Heading1"/>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">Section 1</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:t xml:space="preserve">Link</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:t xml:space="preserve">By Author</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:t xml:space="preserve">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam convallis ut felis a cursus. Etiam sodales quis nisl ac elementum. Suspendisse egestas hendrerit diam sit amet mattis. </w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="Heading1"/>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">1. Sect</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:t xml:space="preserve">Etiam convallis ut felis a cursus. </w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve">link 1 </w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve">and </w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve">28</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve">, idet aktier </w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">title 2</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:t xml:space="preserve">Lorem ipsum dolor sit amet, consectetur adipiscing elit. :</w:t>
+</w:r>
+<w:r>
+  <w:rPr>
+    <w:vertAlign w:val="superscript"/>
+  </w:rPr>
+  <w:t xml:space="preserve">[1]</w:t>
+</w:r>
+</w:p>
+<w:tbl>
+<w:tblPr>
+  <w:tblStyle w:val="TableGrid"/>
+  <w:tblW w:w="5000" w:type="pct"/>
+  <w:tblBorders>
+    <w:top w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+    <w:left w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+    <w:bottom w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+    <w:right w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+    <w:insideH w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+    <w:insideV w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+  </w:tblBorders>
+  <w:tblLook w:val="0600" w:firstRow="0" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="1" w:noVBand="1"/>
+</w:tblPr>
+<w:tr>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">1,1</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">1,2</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">1,3</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:rPr>
+          <w:vertAlign w:val="subscript"/>
+        </w:rPr>
+        <w:t xml:space="preserve">=</w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:vertAlign w:val="subscript"/>
+        </w:rPr>
+        <w:t xml:space="preserve">1,4</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">1,5</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">1,6</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+</w:tr>
+<w:tr>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">100</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">100</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">Text</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">Lorem</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">ipsum</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">bla</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+</w:tr>
+</w:tbl>
+<w:p>
+<w:r>
+  <w:t xml:space="preserve">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam convallis ut felis a cursus. </w:t>
+</w:r>
+<w:drawing>
+  <wp:inline distT="0" distB="0" distL="0" distR="0">
+    <wp:extent cx="1524000" cy="1524000"/>
+    <wp:effectExtent l="0" t="0" r="0" b="0"/>
+    <wp:docPr id="1" name="Picture 1"/>
+    <wp:cNvGraphicFramePr>
+      <a:graphicFrameLocks noChangeAspect="1"/>
+    </wp:cNvGraphicFramePr>
+    <a:graphic>
+      <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+        <pic:pic>
+          <pic:nvPicPr>
+            <pic:cNvPr id="1" title="Something beautiful" name="what-a-nice-pic.png"/>
+            <pic:cNvPicPr/>
+          </pic:nvPicPr>
+          <pic:blipFill>
+            <a:blip r:embed="rId8">
+              <a:extLst>
+                <a:ext uri="{28A0092B-C50C-407E-A947-70E740481C1C}">
+                  <a14:useLocalDpi val="0"/>
+                </a:ext>
+              </a:extLst>
+            </a:blip>
+            <a:stretch>
+              <a:fillRect/>
+            </a:stretch>
+          </pic:blipFill>
+          <pic:spPr>
+            <a:xfrm>
+              <a:off x="0" y="0"/>
+              <a:ext cx="1524000" cy="1524000"/>
+            </a:xfrm>
+            <a:prstGeom prst="rect">
+              <a:avLst/>
+            </a:prstGeom>
+          </pic:spPr>
+        </pic:pic>
+      </a:graphicData>
+    </a:graphic>
+  </wp:inline>
+</w:drawing>
+</w:p>
+<w:tbl>
+<w:tblPr>
+  <w:tblStyle w:val="TableGrid"/>
+  <w:tblW w:w="5000" w:type="pct"/>
+  <w:tblBorders>
+    <w:top w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+    <w:left w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+    <w:bottom w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+    <w:right w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+    <w:insideH w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+    <w:insideV w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+  </w:tblBorders>
+  <w:tblLook w:val="0600" w:firstRow="0" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="1" w:noVBand="1"/>
+</w:tblPr>
+<w:tr>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">–</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">1.</w:t>
+      </w:r>
+      <w:r>
+        <w:t xml:space="preserve">Funny spans </w:t>
+      </w:r>
+      <w:r>
+        <w:t xml:space="preserve">and links</w:t>
+      </w:r>
+      <w:r>
+        <w:t xml:space="preserve">, in </w:t>
+      </w:r>
+      <w:r>
+        <w:t xml:space="preserve">,</w:t>
+      </w:r>
+      <w:r>
+        <w:t xml:space="preserve"> here </w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+</w:tr>
+<w:tr>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">–</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">Table list</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+</w:tr>
+<w:tr>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">–</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+  <w:tc>
+    <w:tcPr/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve">With a p and no class</w:t>
+      </w:r>
+      <w:r>
+        <w:t xml:space="preserve">*</w:t>
+      </w:r>
+    </w:p>
+  </w:tc>
+</w:tr>
+</w:tbl>
+<w:p>
+<w:r>
+  <w:t xml:space="preserve">Etiam sodales quis nisl ac elementum. Suspendisse egestas hendrerit diam sit amet mattis.</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:t xml:space="preserve">Sed id consectetur orci. Phasellus ultrices laoreet lectus, a laoreet magna accumsan eget.</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:t xml:space="preserve">Curabitur erat mi, congue non turpis non, faucibus dapibus magna. Phasellus a accumsan tortor. Quisque quam purus, vehicula a auctor vitae,</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="Heading1"/>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">2. Div h1</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:t xml:space="preserve">lobortis nec dui. Aenean rutrum elementum nulla, ut consequat velit accumsan vitae. Duis iaculis nulla elit, quis rhoncus mi malesuada vel.</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="Heading1"/>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">Noter</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:br w:type="page"/>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="Heading1"/>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">Section 2</w:t>
+</w:r>
+</w:p>
+<w:p/>
+<w:drawing>
+  <wp:inline distT="0" distB="0" distL="0" distR="0">
+    <wp:extent cx="2540000" cy="1016000"/>
+    <wp:effectExtent l="0" t="0" r="0" b="0"/>
+    <wp:docPr id="2" name="Picture 2"/>
+    <wp:cNvGraphicFramePr>
+      <a:graphicFrameLocks noChangeAspect="1"/>
+    </wp:cNvGraphicFramePr>
+    <a:graphic>
+      <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+        <pic:pic>
+          <pic:nvPicPr>
+            <pic:cNvPr id="2" title="Placeholder Image" name="250x100.png"/>
+            <pic:cNvPicPr/>
+          </pic:nvPicPr>
+          <pic:blipFill>
+            <a:blip r:embed="rId9">
+              <a:extLst>
+                <a:ext uri="{28A0092B-C50C-407E-A947-70E740481C1C}">
+                  <a14:useLocalDpi val="0"/>
+                </a:ext>
+              </a:extLst>
+            </a:blip>
+            <a:stretch>
+              <a:fillRect/>
+            </a:stretch>
+          </pic:blipFill>
+          <pic:spPr>
+            <a:xfrm>
+              <a:off x="0" y="0"/>
+              <a:ext cx="2540000" cy="1016000"/>
+            </a:xfrm>
+            <a:prstGeom prst="rect">
+              <a:avLst/>
+            </a:prstGeom>
+          </pic:spPr>
+        </pic:pic>
+      </a:graphicData>
+    </a:graphic>
+  </wp:inline>
+</w:drawing>
+<w:p>
+<w:pPr>
+  <w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:r>
+  <w:t xml:space="preserve">Sec 2</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:t xml:space="preserve">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam convallis ut felis a cursus </w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:t xml:space="preserve"> • Fake item 1. Beløbet skal være indbetalt til den finansielle virksomhed</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:t xml:space="preserve"> • Fake item 2, long one. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam convallis ut felis a cursus. Etiam sodales quis nisl ac elementum. Suspendisse egestas hendrerit diam sit amet mattis. Sed id consectetur orci. Phasellus ultrices laoreet lectus, a laoreet magna accumsan eget. Curabitur erat mi, congue non turpis non, faucibus dapibus magna. Phasellus a accumsan tortor. Quisque quam purus, vehicula a auctor vitae, lobortis nec dui. Aenean rutrum elementum nulla, ut consequat velit accumsan vitae. Duis iaculis nulla elit, quis rhoncus mi malesuada vel.</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:rPr>
+    <w:i/>
+  </w:rPr>
+  <w:t xml:space="preserve">“… Quoted text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam convallis ut felis a cursus. …”.</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:rPr>
+    <w:vertAlign w:val="superscript"/>
+  </w:rPr>
+  <w:t xml:space="preserve">[1]</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve">Jf. </w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve">Ref 1</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve"> lorem ipsum, and </w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve">Ref 2</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve"> Lorem ipsum dolor sit amet, consectetur adipiscing </w:t>
+</w:r>
+<w:r>
+  <w:rPr>
+    <w:i/>
+  </w:rPr>
+  <w:t xml:space="preserve">Italics</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve">: elit. Etiam convallis ut felis </w:t>
+</w:r>
+<w:r>
+  <w:rPr>
+    <w:i/>
+  </w:rPr>
+  <w:t xml:space="preserve">a cursus</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve">: Etiam sodales quis nisl ac elementum. Suspendisse egestas hendrerit diam sit amet mattis. </w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve">Ref 3</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve"> ed id consectetur orci. Phasellus ultrices laoreet lectus, a laoreet magna accumsan eget. </w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:t xml:space="preserve"> </w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:rPr>
+    <w:vertAlign w:val="superscript"/>
+  </w:rPr>
+  <w:t xml:space="preserve">[2]</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve">Jf. </w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve">Ref 4</w:t>
+</w:r>
+<w:r>
+  <w:t xml:space="preserve"> Curabitur erat mi, congue non turpis non, faucibus dapibus magna. Phasellus a accumsan tortor. Quisque quam purus, vehicula a auctor vitae, lobortis nec dui</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:r>
+  <w:t xml:space="preserve"> </w:t>
+</w:r>
+</w:p>

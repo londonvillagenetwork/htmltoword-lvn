@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+if ! which xmllint &>/dev/null; then
+  echo "Please install xmllint"
+  exit 0
+fi
+
+for f in clean smudge; do
+  if ! git config --get "filter.xml-c14n.$f" &>/dev/null; then
+    git config --add "filter.xml-c14n.$f" "xmllint --c14n11 -"
+  fi
+done
