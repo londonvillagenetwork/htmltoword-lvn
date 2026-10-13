@@ -368,10 +368,11 @@ module Htmltoword
       html = '<body></body>' if html.nil? || html.empty?
       original_source = Nokogiri::HTML(html.gsub(/>\s+</, '><'))
       source = xslt(stylesheet_name: 'cleanup').transform(original_source)
+      # Before the relations: it names the media files the image relationships point to
+      local_images(source)
       transform_and_replace(source, xslt_path('numbering'), Document.numbering_xml_file)
       transform_and_replace(source, xslt_path('relations'), Document.relations_xml_file)
       transform_doc_xml(source, extras)
-      local_images(source)
     end
 
     def transform_doc_xml(source, extras = false)
@@ -389,31 +390,47 @@ module Htmltoword
       @replaceable_files[file] = content
     end
 
-    #generates an array of hashes with filename and full url
-    #for all images to be embeded in the word document
+    #generates an array of hashes with filename and full url or data
+    #for all images to be embeded in the word document. Each embedded image is tagged with
+    #data-media-filename, which relations.xslt uses as its relationship target
     def local_images(source)
       source.css('img').each_with_index do |image, i|
         src = image['src'].to_s
-        next if src.empty?
+        # images.xslt leaves out images without a size; drop them so they aren't downloaded either
+        if src.empty? || !sized_image?(image)
+          image.remove
+          next
+        end
 
         data_image = parse_data_image(src)
-        # Same as ActiveSupport's presence: blank (nil, empty or whitespace) becomes nil
-        provided_filename = image['data-filename'] unless image['data-filename'].to_s.strip.empty?
-
         if data_image
           ext = data_image[:ext]
-          filename = sanitize_filename(provided_filename || "image#{i + 1}.#{ext}")
+          filename = "image#{i + 1}.#{ext}"
+          # images.xslt names the picture after data-filename or the last part of the src
+          image['data-filename'] = filename if image['data-filename'].to_s.strip.empty?
           @image_files << { filename: filename, data: data_image[:data], ext: ext }
-        else
-          # Remote/absolute URL (or relative); derive extension from filename if present
-          inferred_filename = provided_filename || src.split('/').last.to_s
-          ext = File.extname(inferred_filename).delete('.').downcase
-          # fallback if no extension could be inferred
-          ext = 'png' if ext.empty?
-          filename = sanitize_filename("image#{i + 1}.#{ext}")
+        elsif image['data-external'] != 'true'
+          ext = image_extension(image['data-filename'], src)
+          filename = "image#{i + 1}.#{ext}"
           @image_files << { filename: filename, url: src, ext: ext }
+        else
+          next
         end
+        image['data-media-filename'] = filename
       end
+    end
+
+    # Mirrors the size check in images.xslt
+    def sized_image?(image)
+      image.key?('data-width') || image.key?('data-height') || image['style'].to_s.match?(/width|height/)
+    end
+
+    # Lowercase extension of data-filename, or else of the last part of the url's path; png if there is none
+    def image_extension(provided_filename, src)
+      name = provided_filename.to_s.strip
+      name = src.split(/[?#]/).first.to_s.split('/').last.to_s if name.empty?
+      ext = File.extname(name).delete('.').downcase
+      ext.empty? ? 'png' : ext
     end
 
     def parse_data_image(src)
@@ -433,11 +450,6 @@ module Htmltoword
       { data: Base64.decode64(b64), ext: ext }
     rescue ArgumentError
       nil
-    end
-
-    def sanitize_filename(name)
-      # Minimal sanitization to avoid invalid zip entry names
-      name.gsub(/[\\\:\\*\?\"\<\>\|]/, '_')
     end
 
     #get extension from filename and clean to match content_types

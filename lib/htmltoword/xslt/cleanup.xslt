@@ -23,7 +23,11 @@
   <xsl:template match="command"/>
   <xsl:template match="font"/>
   <xsl:template match="iframe"/>
-  <xsl:template match="img[not(starts-with(@src, 'http://')) and not(starts-with(@src, 'https://'))]"/>
+  <!-- Only remote images and inline PNG/JPEG data URIs; local file paths must never be read -->
+  <xsl:template match="img[not(starts-with(@src, 'http://')) and not(starts-with(@src, 'https://'))
+                       and not(starts-with(@src, 'data:image/png;base64,'))
+                       and not(starts-with(@src, 'data:image/jpeg;base64,'))
+                       and not(starts-with(@src, 'data:image/jpg;base64,'))]"/>
   <xsl:template match="isindex"/>
   <xsl:template match="map"/>
   <xsl:template match="noframes"/>

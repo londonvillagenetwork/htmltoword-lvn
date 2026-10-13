@@ -2,6 +2,7 @@
 require 'nokogiri'
 require 'zip'
 require 'open-uri'
+require 'base64'
 require_relative 'htmltoword/configuration'
 
 module Htmltoword

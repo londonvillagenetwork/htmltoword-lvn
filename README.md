@@ -156,11 +156,14 @@ To create page breaks simply add a div with class -page-break ie:
 ````
 
 ### Images
-Support for images is very basic and is only possible for external images(i.e accessed via URL). If the image doesn't 
-have correctly defined it's width and height it won't be included in the document
+Support for images is very basic. Images can be accessed via URL (`http://` or `https://`) or given inline as PNG or
+JPEG base64 data URIs. Local file paths are never read. If the image doesn't have correctly defined it's width and
+height it won't be included in the document (nor downloaded).
+
+URL images are downloaded and stored within the document, unless `data-external="true"` is set, in which case the
+document links to the URL instead.
 
 **Limitations:**
-- Images are external i.e. pictures accessed via URL, not stored within document
 - only sizing is customisable
 
 Examples:
@@ -168,6 +171,8 @@ Examples:
 <img src="http://placehold.it/250x100.png" style="width: 250px; height: 100px">
 <img src="http://placehold.it/250x100.png" data-width="250px" data-height="100px">
 <img src="http://placehold.it/250x100.png" data-height="150px" style="width:250px; height:100px">
+<img src="http://placehold.it/250x100.png" data-external="true" style="width: 250px; height: 100px">
+<img src="data:image/png;base64,iVBORw0KGgo..." style="width: 250px; height: 100px">
 ```
 
 ## Contributing / Extending

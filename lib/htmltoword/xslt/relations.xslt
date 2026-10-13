@@ -22,6 +22,10 @@
   <xsl:template match="img" priority="0">
     <Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image">
       <xsl:choose>
+        <!-- Set by Document#local_images to the name of the file it stores in word/media -->
+        <xsl:when test="@data-media-filename">
+          <xsl:attribute name="Target">media/<xsl:value-of select="@data-media-filename"/></xsl:attribute>
+        </xsl:when>
         <xsl:when test="@data-external = 'true'">
           <xsl:attribute name="Target"><xsl:value-of select="@src"/></xsl:attribute>
           <xsl:attribute name="TargetMode">External</xsl:attribute>
