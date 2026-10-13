@@ -23,6 +23,9 @@ describe Htmltoword::Document do
       EOL
     end
 
+    # Serve the remote images without the network
+    before { allow(URI).to receive(:open).and_yield(StringIO.new('image data')) }
+
     #in order to test if the images files are embedded correctly we have to create_and_save, then open the zip and look for them. Then ensure that we cleanup the created file.
     #There is probably a better way of doing it as this seems very performance heavy but does have the advantage of testing the create method all the way through...
     it "should only embed local images" do
@@ -33,6 +36,7 @@ describe Htmltoword::Document do
           # Find specific entry
           expect(zip_file.glob('word/media/*').size).to eq 6
         end
+        expect(URI).to have_received(:open).with(%r{\Ahttps://placehold\.it/}, 'rb').exactly(6).times
       ensure
         File.delete(tmp_path(filename))
       end

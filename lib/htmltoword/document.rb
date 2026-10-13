@@ -21,9 +21,9 @@ module Htmltoword
         docx_content
       end
 
-      def create_and_save(content, file_path, template_name = nil, extras = false)
+      def create_and_save(content, file_path, template_name = nil, extras = false, margins: nil, watermark: nil)
         File.open(file_path, 'wb') do |out|
-          out << create(content, template_name, extras)
+          out << create(content, template_name, extras, margins: margins, watermark: watermark)
         end
       end
 
@@ -119,46 +119,145 @@ module Htmltoword
 
             next File.binread(input_file.path) unless document_xml && relations_xml && content_types_xml
 
-            header_path = 'word/header_watermark.xml'
-            header_target = header_path.sub('word/', '')
-            header_rel_path = 'word/_rels/header_watermark.xml.rels'
-            image_target = "media/#{image[:filename]}"
-
-            relations_doc = Nokogiri::XML(relations_xml)
-            existing_ids = relations_doc.xpath('//xmlns:Relationship').map { |node| node['Id'] }
-            header_rel_id = generate_unique_relationship_id(existing_ids)
-
-            # Remove previous references to our header to avoid duplicates
-            relations_doc.xpath("//xmlns:Relationship[@Target='#{header_target}']").each(&:remove)
-
-            relationship_node = Nokogiri::XML::Node.new('Relationship', relations_doc)
-            relationship_node['Id'] = header_rel_id
-            relationship_node['Type'] = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/header'
-            relationship_node['Target'] = header_target
-            relations_doc.root.add_child(relationship_node)
-
-            extent = calculate_watermark_extent(document_xml, image)
-            updated_document_xml = add_header_reference_to_document(document_xml, header_rel_id)
-            zip.get_output_stream('word/document.xml') { |out| out.write(updated_document_xml) }
-            zip.get_output_stream('word/_rels/document.xml.rels') { |out| out.write(relations_doc.to_xml) }
-
-            header_xml = build_watermark_header_xml(image_rel_id: 'rId1', extent: extent)
-            # Target in a part relationships file is resolved relative to the part (word/header_*.xml)
+            # Target in a part relationships file is resolved relative to the part (word/header*.xml)
             # The image lives in word/media/, so the correct relative target is 'media/...'
-            header_rels_xml = build_header_relationships_xml(image_rel_id: 'rId1', image_target: image_target)
+            image_target = "media/#{image[:filename]}"
+            extent = calculate_watermark_extent(document_xml, image)
+            # docPr ids must be unique across the whole package, body images included
+            drawing_id = max_drawing_id(zip) + 1
 
-            zip.get_output_stream(header_path) { |out| out.write(header_xml) }
-            zip.get_output_stream(header_rel_path) { |out| out.write(header_rels_xml) }
+            document_doc = Nokogiri::XML(document_xml)
+            relations_doc = Nokogiri::XML(relations_xml)
+            content_types_doc = Nokogiri::XML(content_types_xml)
+            existing_header_paths, sections_without_header = find_default_headers(document_doc, relations_doc)
+
+            # Template headers are kept: the watermark is added to them instead of replacing them
+            existing_header_paths.each do |header_path|
+              add_watermark_to_existing_header(zip, header_path, image_target, extent, drawing_id)
+              drawing_id += 1
+            end
+
+            unless sections_without_header.empty?
+              header_path = 'word/header_watermark.xml'
+              header_target = header_path.sub('word/', '')
+              header_rel_path = 'word/_rels/header_watermark.xml.rels'
+
+              existing_ids = relations_doc.xpath('//xmlns:Relationship').map { |node| node['Id'] }
+              header_rel_id = generate_unique_relationship_id(existing_ids)
+
+              relationship_node = Nokogiri::XML::Node.new('Relationship', relations_doc)
+              relationship_node['Id'] = header_rel_id
+              relationship_node['Type'] = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/header'
+              relationship_node['Target'] = header_target
+              relations_doc.root.add_child(relationship_node)
+
+              add_header_reference_to_sections(document_doc, sections_without_header, header_rel_id)
+              zip.get_output_stream('word/_rels/document.xml.rels') { |out| out.write(relations_doc.to_xml) }
+
+              header_xml = build_watermark_header_xml(image_rel_id: 'rId1', extent: extent, drawing_id: drawing_id)
+              header_rels_xml = build_header_relationships_xml(image_rel_id: 'rId1', image_target: image_target)
+              zip.get_output_stream(header_path) { |out| out.write(header_xml) }
+              zip.get_output_stream(header_rel_path) { |out| out.write(header_rels_xml) }
+              ensure_header_content_type(content_types_doc, header_path)
+            end
+
+            zip.get_output_stream('word/document.xml') do |out|
+              out.write(document_doc.to_xml(save_with: Nokogiri::XML::Node::SaveOptions::AS_XML))
+            end
             zip.get_output_stream("word/#{image_target}") { |out| out.write(image[:data]) }
 
-            content_types_doc = Nokogiri::XML(content_types_xml)
-            ensure_header_content_type(content_types_doc, header_path)
             ensure_image_content_type(content_types_doc, image[:extension])
             zip.get_output_stream('[Content_Types].xml') { |out| out.write(content_types_doc.to_xml) }
           end
 
           File.binread(input_file.path)
         end
+      end
+
+      # Returns the header parts already used as default headers, and the sections that need the
+      # watermark header. A section without a default headerReference inherits the previous
+      # section's header, so only sections before the first one with a default header need ours.
+      def find_default_headers(document_doc, relations_doc)
+        namespaces = { 'w' => 'http://schemas.openxmlformats.org/wordprocessingml/2006/main',
+                       'r' => 'http://schemas.openxmlformats.org/officeDocument/2006/relationships' }
+        header_paths = []
+        sections_without_header = []
+        inherits_header = false
+
+        document_doc.xpath('//w:sectPr', namespaces).each do |sect_pr|
+          reference = sect_pr.at_xpath("w:headerReference[@w:type='default']", namespaces)
+          target = reference && relations_doc.at_xpath("//xmlns:Relationship[@Id='#{reference['r:id']}']")&.[]('Target')
+          # A reference whose relationship is missing would leave two default headers once ours is added
+          reference.remove if reference && !target
+
+          if target
+            inherits_header = true
+            header_paths << (target.start_with?('/') ? target.delete_prefix('/') : "word/#{target}")
+          elsif !inherits_header
+            sections_without_header << sect_pr
+          end
+        end
+
+        [header_paths.uniq, sections_without_header]
+      end
+
+      def max_drawing_id(zip)
+        zip.glob('word/**/*.xml').flat_map do |entry|
+          entry.get_input_stream.read.scan(/<\w+:docPr\b[^>]*?\sid="(\d+)"/).flatten.map(&:to_i)
+        end.max.to_i
+      end
+
+      def add_watermark_to_existing_header(zip, header_path, image_target, extent, drawing_id)
+        header_entry = zip.find_entry(header_path)
+        return unless header_entry
+
+        header_doc = Nokogiri::XML(header_entry.get_input_stream.read)
+        rels_path = "#{File.dirname(header_path)}/_rels/#{File.basename(header_path)}.rels"
+        rels_entry = zip.find_entry(rels_path)
+
+        if rels_entry
+          rels_doc = Nokogiri::XML(rels_entry.get_input_stream.read)
+          existing_ids = rels_doc.xpath('//xmlns:Relationship').map { |node| node['Id'] }
+          image_rel_id = generate_unique_relationship_id(existing_ids)
+          relationship_node = Nokogiri::XML::Node.new('Relationship', rels_doc)
+          relationship_node['Id'] = image_rel_id
+          relationship_node['Type'] = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/image'
+          relationship_node['Target'] = image_target
+          rels_doc.root.add_child(relationship_node)
+          rels_xml = rels_doc.to_xml
+        else
+          image_rel_id = 'rId1'
+          rels_xml = build_header_relationships_xml(image_rel_id: image_rel_id, image_target: image_target)
+        end
+
+        WATERMARK_NAMESPACES.each do |attribute, href|
+          prefix = attribute.delete_prefix('xmlns:')
+          header_doc.root.add_namespace_definition(prefix, href) unless header_doc.root.namespaces[attribute]
+        end
+
+        namespaces = { 'w' => 'http://schemas.openxmlformats.org/wordprocessingml/2006/main' }
+        watermark_doc = Nokogiri::XML(build_watermark_header_xml(image_rel_id: image_rel_id, extent: extent,
+                                                                 drawing_id: drawing_id))
+        watermark_run = watermark_doc.at_xpath('/w:hdr/w:p/w:r', namespaces)
+
+        # Put the anchored drawing in the header's first top-level paragraph so the header's
+        # height is unchanged; it is positioned relative to the page, not the paragraph
+        if (paragraph = header_doc.root.at_xpath('w:p', namespaces))
+          if (paragraph_properties = paragraph.at_xpath('w:pPr', namespaces))
+            paragraph_properties.add_next_sibling(watermark_run)
+          elsif paragraph.element_children.first
+            paragraph.element_children.first.add_previous_sibling(watermark_run)
+          else
+            paragraph.add_child(watermark_run)
+          end
+        else
+          header_doc.root.add_child(watermark_run.parent)
+        end
+
+        zip.get_output_stream(header_path) do |out|
+          out.write(header_doc.to_xml(save_with: Nokogiri::XML::Node::SaveOptions::AS_XML))
+        end
+        zip.get_output_stream(rels_path) { |out| out.write(rels_xml) }
       end
 
       def generate_unique_relationship_id(existing_ids)
@@ -174,24 +273,22 @@ module Htmltoword
         end
       end
 
-      def add_header_reference_to_document(document_xml, header_rel_id)
-        doc = Nokogiri::XML(document_xml)
-        namespaces = { 'w' => 'http://schemas.openxmlformats.org/wordprocessingml/2006/main',
-                       'r' => 'http://schemas.openxmlformats.org/officeDocument/2006/relationships' }
-
-        unless doc.root.namespaces.value?('http://schemas.openxmlformats.org/officeDocument/2006/relationships')
-          doc.root.add_namespace_definition('r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships')
+      def add_header_reference_to_sections(document_doc, sections, header_rel_id)
+        unless document_doc.root.namespaces.value?('http://schemas.openxmlformats.org/officeDocument/2006/relationships')
+          document_doc.root.add_namespace_definition('r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships')
         end
 
-        doc.xpath('//w:sectPr', namespaces).each do |sect_pr|
-          sect_pr.xpath("w:headerReference[@r:id='#{header_rel_id}']", namespaces).each(&:remove)
-          header_reference = Nokogiri::XML::Node.new('w:headerReference', doc)
+        sections.each do |sect_pr|
+          header_reference = Nokogiri::XML::Node.new('w:headerReference', document_doc)
           header_reference['w:type'] = 'default'
           header_reference['r:id'] = header_rel_id
-          sect_pr.add_child(header_reference)
+          # CT_SectPr requires headerReference/footerReference before any other child (pgSz, pgMar, ...)
+          if (first_child = sect_pr.element_children.first)
+            first_child.add_previous_sibling(header_reference)
+          else
+            sect_pr.add_child(header_reference)
+          end
         end
-
-        doc.to_xml(save_with: Nokogiri::XML::Node::SaveOptions::AS_XML)
       end
 
 
@@ -227,14 +324,17 @@ module Htmltoword
     #
     def generate
       Zip::File.open(@template_path) do |template_zip|
+        relations_xml, template_relation_ids = merge_template_relations(template_zip)
         buffer = Zip::OutputStream.write_buffer do |out|
           template_zip.each do |entry|
             out.put_next_entry entry.name
             if @replaceable_files[entry.name] && entry.name == Document.doc_xml_file
-              source = entry.get_input_stream.read
+              source = rename_relationship_ids(entry.get_input_stream.read, template_relation_ids)
               # Change only the body of document. TODO: Improve this...
               source = source.sub(/(<w:body>)((.|\n)*?)(<w:sectPr)/, "\\1#{@replaceable_files[entry.name]}\\4")
               out.write(source)
+            elsif @replaceable_files[entry.name] && entry.name == Document.relations_xml_file
+              out.write(relations_xml)
             elsif @replaceable_files[entry.name]
               out.write(@replaceable_files[entry.name])
             elsif entry.name == Document.content_types_xml_file
@@ -297,15 +397,16 @@ module Htmltoword
         next if src.empty?
 
         data_image = parse_data_image(src)
-        provided_filename = image['data-filename']
+        # Same as ActiveSupport's presence: blank (nil, empty or whitespace) becomes nil
+        provided_filename = image['data-filename'] unless image['data-filename'].to_s.strip.empty?
 
         if data_image
           ext = data_image[:ext]
-          filename = sanitize_filename(provided_filename.presence || "image#{i + 1}.#{ext}")
+          filename = sanitize_filename(provided_filename || "image#{i + 1}.#{ext}")
           @image_files << { filename: filename, data: data_image[:data], ext: ext }
         else
           # Remote/absolute URL (or relative); derive extension from filename if present
-          inferred_filename = provided_filename.presence || src.split('/').last.to_s
+          inferred_filename = provided_filename || src.split('/').last.to_s
           ext = File.extname(inferred_filename).delete('.').downcase
           # fallback if no extension could be inferred
           ext = 'png' if ext.empty?
@@ -345,6 +446,48 @@ module Htmltoword
     end
 
     #inject the required content_types into the [content_types].xml file...
+    # relations.xslt rebuilds document.xml.rels from scratch, so the relationships the template's own
+    # parts rely on (headers, footers, footnotes, ...) are copied over. They are renumbered after the
+    # generated ones, which start at rId8 and would otherwise clash. Hyperlinks and images belong to the
+    # template body, which is replaced, so they are dropped.
+    TEMPLATE_BODY_RELATIONSHIP_TYPES = %w[hyperlink image].map do |type|
+      "http://schemas.openxmlformats.org/officeDocument/2006/relationships/#{type}"
+    end.freeze
+
+    def merge_template_relations(template_zip)
+      generated_xml = @replaceable_files[Document.relations_xml_file]
+      template_entry = template_zip.find_entry(Document.relations_xml_file)
+      return [generated_xml, {}] unless generated_xml && template_entry
+
+      generated_doc = Nokogiri::XML(generated_xml)
+      generated = generated_doc.xpath('//xmlns:Relationship')
+      existing = generated.map { |node| [node['Type'], node['Target']] }
+      next_id = generated.filter_map { |node| node['Id'][/\ArId(\d+)\z/, 1]&.to_i }.max.to_i + 1
+      ids = {}
+
+      Nokogiri::XML(template_entry.get_input_stream.read).xpath('//xmlns:Relationship').each do |node|
+        next if TEMPLATE_BODY_RELATIONSHIP_TYPES.include?(node['Type'])
+        next if existing.include?([node['Type'], node['Target']])
+
+        ids[node['Id']] = "rId#{next_id}"
+        next_id += 1
+        node['Id'] = ids[node['Id']]
+        generated_doc.root.add_child(node)
+      end
+
+      return [generated_xml, ids] if ids.empty?
+
+      [generated_doc.to_xml, ids]
+    end
+
+    # Applied to the template's document.xml before its body is replaced, so only the template's own
+    # references (e.g. headerReference/footerReference in sectPr) are renamed
+    def rename_relationship_ids(source, ids)
+      return source if ids.empty?
+
+      source.gsub(/(\sr:\w+=")([^"]*)(")/) { "#{$1}#{ids.fetch($2, $2)}#{$3}" }
+    end
+
     def inject_image_content_types(source)
       doc = Nokogiri::XML(source)
 

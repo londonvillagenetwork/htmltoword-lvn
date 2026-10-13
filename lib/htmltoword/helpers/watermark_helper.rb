@@ -9,6 +9,9 @@ module Htmltoword
         'image/jpg' => 'jpeg'
       }.freeze
 
+      PNG_SIGNATURE = "\x89PNG\r\n\x1A\n".b.freeze
+      JPEG_SIGNATURE = "\xFF\xD8".b.freeze
+
       WATERMARK_EXTENT = {
         'cx' => '9000000',
         'cy' => '9000000'
@@ -39,12 +42,16 @@ module Htmltoword
         return nil if watermark_data.to_s.strip.empty?
 
         metadata, base64_content = watermark_data.split(',', 2)
-        base64_content ||= metadata
-        mime = metadata[%r{image/[^;]+}] if metadata&.match?(%r{image/[^;]+})
-        extension = WATERMARK_MIME_EXTENSION[mime]
-        return nil unless extension
+        if base64_content.nil?
+          # Plain base64 without a data URI prefix
+          base64_content = metadata
+          metadata = nil
+        end
 
         data = Base64.decode64(base64_content)
+        mime = metadata ? metadata[%r{image/[^;]+}] : detect_image_mime(data)
+        extension = WATERMARK_MIME_EXTENSION[mime]
+        return nil unless extension
 
         dimensions = detect_image_dimensions(data, extension)
 
@@ -58,7 +65,7 @@ module Htmltoword
         nil
       end
 
-      def build_watermark_header_xml(image_rel_id: 'rId1', extent: WATERMARK_EXTENT)
+      def build_watermark_header_xml(image_rel_id: 'rId1', extent: WATERMARK_EXTENT, drawing_id: 1)
         Nokogiri::XML::Builder.new do |xml|
           xml['w'].hdr(WATERMARK_NAMESPACES) do
             xml['w'].p do
@@ -71,7 +78,7 @@ module Htmltoword
                     xml['wp'].extent(extent)
                     xml['wp'].effectExtent('l' => 0, 't' => 0, 'r' => 0, 'b' => 0)
                     xml['wp'].wrapNone
-                    xml['wp'].docPr('id' => '1', 'name' => 'Watermark')
+                    xml['wp'].docPr('id' => drawing_id.to_s, 'name' => 'Watermark')
                     xml['wp'].cNvGraphicFramePr { xml['a'].graphicFrameLocks('noChangeAspect' => '1') }
                     xml['a'].graphic do
                       xml['a'].graphicData('uri' => 'http://schemas.openxmlformats.org/drawingml/2006/picture') do
@@ -113,6 +120,14 @@ module Htmltoword
       end
 
       private
+
+        def detect_image_mime(data)
+          if data.start_with?(PNG_SIGNATURE)
+            'image/png'
+          elsif data.start_with?(JPEG_SIGNATURE)
+            'image/jpeg'
+          end
+        end
 
         def detect_image_dimensions(data, extension)
           case extension
@@ -205,8 +220,7 @@ module Htmltoword
         def parse_png_dimensions(data)
           return nil unless data && data.bytesize >= 24
 
-          signature = data[0, 8]
-          return nil unless signature == "\x89PNG\r\n\x1A\n"
+          return nil unless data.start_with?(PNG_SIGNATURE)
 
           header = data[8, 16]
           chunk_length = header[0, 4].unpack1('N')
@@ -223,7 +237,7 @@ module Htmltoword
           return nil unless data && data.bytesize > 4
 
           io = StringIO.new(data)
-          return nil unless io.read(2) == "\xFF\xD8"
+          return nil unless io.read(2) == JPEG_SIGNATURE
 
           loop do
             marker = io.read(2)
